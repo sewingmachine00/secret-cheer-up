@@ -14,30 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      cheer_messages: {
-        Row: {
-          created_at: string
-          emoji: string
-          id: string
-          message: string
-          recipient: string
-        }
-        Insert: {
-          created_at?: string
-          emoji?: string
-          id?: string
-          message: string
-          recipient: string
-        }
-        Update: {
-          created_at?: string
-          emoji?: string
-          id?: string
-          message?: string
-          recipient?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
