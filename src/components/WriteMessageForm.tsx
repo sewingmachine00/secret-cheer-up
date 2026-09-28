@@ -15,12 +15,16 @@ export default function WriteMessageForm({ open, onClose, onSent }: WriteMessage
   const [to, setTo] = useState("");
   const [message, setMessage] = useState("");
   const [emoji, setEmoji] = useState("💛");
+  const [sending, setSending] = useState(false);
 
-  const canSubmit = to.trim() && message.trim();
+  const canSubmit = to.trim() && message.trim() && !sending;
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!canSubmit) return;
-    addMessage({ to: to.trim(), message: message.trim(), emoji });
+    setSending(true);
+    const saved = await addMessage({ to: to.trim(), message: message.trim(), emoji });
+    setSending(false);
+    if (!saved) return;
     setTo("");
     setMessage("");
     setEmoji("💛");
@@ -107,7 +111,7 @@ export default function WriteMessageForm({ open, onClose, onSent }: WriteMessage
               className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground rounded-xl py-3 font-medium text-sm transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Send size={16} />
-              보내기
+              {sending ? "보내는 중..." : "보내기"}
             </button>
           </motion.div>
         </motion.div>

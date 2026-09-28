@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { getMessages } from "@/lib/messages";
@@ -8,11 +8,20 @@ import PostItModal from "@/components/PostItModal";
 import WriteMessageForm from "@/components/WriteMessageForm";
 
 export default function Index() {
-  const [messages, setMessages] = useState<CheerMessage[]>(getMessages);
+  const [messages, setMessages] = useState<CheerMessage[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<CheerMessage | null>(null);
   const [formOpen, setFormOpen] = useState(false);
 
-  const refresh = useCallback(() => setMessages(getMessages()), []);
+  const refresh = useCallback(async () => {
+    const data = await getMessages();
+    setMessages(data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 max-w-2xl mx-auto">
@@ -31,7 +40,12 @@ export default function Index() {
       </motion.header>
 
       {/* Envelope grid */}
-      {messages.length === 0 ? (
+      {loading ? (
+        <div className="text-center py-20 text-muted-foreground">
+          <p className="text-5xl mb-4">💌</p>
+          <p className="font-display text-lg">메시지를 불러오는 중...</p>
+        </div>
+      ) : messages.length === 0 ? (
         <motion.div
           className="text-center py-20 text-muted-foreground"
           initial={{ opacity: 0 }}
