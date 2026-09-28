@@ -14,7 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cheer_messages: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          message: string
+          recipient: string
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message: string
+          recipient: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message?: string
+          recipient?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
